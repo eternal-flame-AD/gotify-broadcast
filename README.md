@@ -44,7 +44,7 @@ In order to control from which and to which a broadcast is sent, a filter system
 
 #### The Matching Routine
 
-Messages are filtered with a iptables-like filter system. The filter is a chain of [Rules](https://godoc.org/eternal-flame-AD/gotify-broadcast/rules/#Rule), which contains a [match](https://godoc.org/eternal-flame-AD/gotify-broadcast/rules/#MatchSet) describing how this rule matches messages, and a [action](https://godoc.org/eternal-flame-AD/gotify-broadcast/rules/#Action) describing the action to take when this rule matches successfully.
+Messages are filtered with a iptables-like filter system. The filter is a chain of [Rules](https://godoc.org/github.com/eternal-flame-AD/gotify-broadcast/rules/#Rule), which contains a [match](https://godoc.org/github.com/eternal-flame-AD/gotify-broadcast/rules/#MatchSet) describing how this rule matches messages, and a [action](https://godoc.org/github.com/eternal-flame-AD/gotify-broadcast/rules/#Action) describing the action to take when this rule matches successfully.
 
 ```yaml
 receiver_filter:
@@ -87,7 +87,7 @@ sender_filter:
     action: <action>
 ```
 
-All modes and its parameter requirements is documented [here](https://godoc.org/eternal-flame-AD/gotify-broadcast/rules/#Mode)
+All modes and its parameter requirements is documented [here](https://godoc.org/github.com/eternal-flame-AD/gotify-broadcast/rules/#Mode)
 
 #### On the sender side
 When a broadcast is created, the `receiver_filter` will be applied to each recipient. Similar to the `OUTPUT` chain in iptables, when the filter evaluates to `Accept`, the message is sent to that recipient (but whether the message is actually received also depends on the configuration of the `sender_filter` filter on the recipient side)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"html/template"
+	"text/template"
 
 	"github.com/eternal-flame-AD/gotify-broadcast/model"
 	"github.com/eternal-flame-AD/gotify-broadcast/rules"

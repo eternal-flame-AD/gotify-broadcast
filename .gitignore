@@ -1,0 +1,5 @@
+.idea
+vendor
+build
+OPENSOURCELICENSE
+*.so

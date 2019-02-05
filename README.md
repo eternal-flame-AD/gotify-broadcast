@@ -178,6 +178,15 @@ receiver_filter:
   action: reject
 ```
 
+Mute broadcasts sent by myself:
+```yaml
+receiver_filter:
+- match:
+  - mode: user_name
+    user_name: <my_user_name>
+  action: reject
+```
+
 #### On the receiver side
 
 When a broadcast is received, the `sender_filter` will be applied, similar to the `INPUT` chain in iptables. When this also evaluates to `Accept`, the message is eventually delivered.

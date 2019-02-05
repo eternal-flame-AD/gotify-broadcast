@@ -25,9 +25,6 @@ func (c *Plugin) recvMessage(msg model.Message) {
 	if !c.enabled {
 		return
 	}
-	if msg.Sender.ID == c.UserCtx.ID {
-		return
-	}
 	if msg.Receiver.ID != c.UserCtx.ID {
 		return
 	}

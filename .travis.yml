@@ -1,44 +1,28 @@
-sudo: required
-dist: xenial
 language: go
 go:
   - "1.11.5"
 
-addons:
-  apt:
-    packages:
-     - mingw-w64
-     - gcc-aarch64-linux-gnu
-     - g++-aarch64-linux-gnu
-     - gcc-arm-linux-gnueabihf
-     - g++-arm-linux-gnueabihf
+services:
+  - docker
 
 notifications:
   email: false
 
 env:
-  - GO111MODULE=on
+  - GO111MODULE=on GOTIFY_VERSIONS="v2.0.0 master"
 
 before_install:
   - make download-tools
-  - GO111MODULE=off go get gopkg.in/mikefarah/yq.v2
+  - go get -d
 
 script:
-  - make check
+  - go test ./...
 
 before_deploy:
   - >
-    if ! [ "$BEFORE_DEPLOY_RUN" ]; then
-      export BEFORE_DEPLOY_RUN=1;
-      for TARGET in master 44f905d; do
-        TARGET_GO_VERSION=$(curl -fsSL "https://raw.githubusercontent.com/gotify/server/$TARGET/.travis.yml" | yq.v2 read - go\[0\]);
-        eval "$(gimme ${TARGET_GO_VERSION})";
-                                                               CGO_ENABLED=1 GOOS=linux   GOARCH=amd64       make GOTIFY_VERSION=${TARGET} build;
-        CC=aarch64-linux-gnu-gcc   CXX=aarch64-linux-gnu-g++   CGO_ENABLED=1 GOOS=linux   GOARCH=arm64       make GOTIFY_VERSION=${TARGET} build;
-        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ CGO_ENABLED=1 GOOS=linux   GOARCH=arm GOARM=7 make GOTIFY_VERSION=${TARGET} build;
-      done
-      ls -lath build;
-    fi
+    for TARGET in $GOTIFY_VERSIONS; do
+      make GOTIFY_VERSION="$TARGET" FILE_SUFFIX="-for-gotify-$TARGET" build;
+    done
 
 deploy:
   - provider: releases

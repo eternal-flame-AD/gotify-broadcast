@@ -1,0 +1,3 @@
+package ensure
+
+import _ "github.com/gotify/server/ui"

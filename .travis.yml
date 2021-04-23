@@ -17,8 +17,6 @@ before_install:
 
 script:
   - go test ./...
-
-before_deploy:
   - >
     for TARGET in $GOTIFY_VERSIONS; do
       make GOTIFY_VERSION="$TARGET" FILE_SUFFIX="-for-gotify-$TARGET" build;

@@ -9,7 +9,7 @@ notifications:
   email: false
 
 env:
-  - GO111MODULE=on GOTIFY_VERSIONS="v2.0.21 v2.0.5 v2.0.1 master"
+  - GO111MODULE=on GOTIFY_VERSIONS="v2.0.22 v2.0.21 v2.0.20 v2.0.19 v2.0.18"
 
 before_install:
   - make download-tools

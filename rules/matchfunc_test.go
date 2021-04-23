@@ -7,21 +7,21 @@ import (
 )
 
 func TestStringMatch(t *testing.T) {
-	Convey("Test String Match", t, func() {
-		Convey("regexp", func() {
-			Convey("should match", func() {
-				So(stringMatch(true, "^\\[(INFO|DEBUG)\\]", "[INFO]Server started"), ShouldBeTrue)
+	Convey("Test String Match", t, func(c C) {
+		c.Convey("regexp", func(c C) {
+			c.Convey("should match", func(c C) {
+				c.So(stringMatch(true, "^\\[(INFO|DEBUG)\\]", "[INFO]Server started"), ShouldBeTrue)
 			})
-			Convey("should not match", func() {
-				So(stringMatch(true, "^\\[(INFO|DEBUG)\\]", "[SEVERE]Server errored"), ShouldBeFalse)
+			c.Convey("should not match", func(c C) {
+				c.So(stringMatch(true, "^\\[(INFO|DEBUG)\\]", "[SEVERE]Server errored"), ShouldBeFalse)
 			})
 		})
-		Convey("plain", func() {
-			Convey("should match", func() {
-				So(stringMatch(false, "ok", "ok"), ShouldBeTrue)
+		c.Convey("plain", func(c C) {
+			c.Convey("should match", func(c C) {
+				c.So(stringMatch(false, "ok", "ok"), ShouldBeTrue)
 			})
-			Convey("should not match", func() {
-				So(stringMatch(false, "ok?", "ok"), ShouldBeFalse)
+			c.Convey("should not match", func(c C) {
+				c.So(stringMatch(false, "ok?", "ok"), ShouldBeFalse)
 			})
 		})
 	})

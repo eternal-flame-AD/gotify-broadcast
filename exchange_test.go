@@ -11,12 +11,12 @@ import (
 )
 
 func TestMessageExchange(t *testing.T) {
-	Convey("Test Message Exchange", t, func() {
+	Convey("Test Message Exchange", t, func(c C) {
 		exchanger := newMessageExchange()
-		Convey("sends messages", func() {
+		c.Convey("sends messages", func(c C) {
 			exchanger.MsgChan <- model.Message{}
 		})
-		Convey("callback receives mesasges", func() {
+		c.Convey("callback receives mesasges", func(c C) {
 			test1Received, test2Received := make(chan struct{}), make(chan struct{})
 			exchanger.OnMessage(func(msg model.Message) {
 				if msg.Sender.ID == 1 {

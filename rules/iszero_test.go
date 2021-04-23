@@ -8,7 +8,7 @@ import (
 )
 
 func TestIsZero(t *testing.T) {
-	Convey("test is zero", t, func() {
+	Convey("test is zero", t, func(c C) {
 		for _, val := range []interface{}{
 			[]string(nil),
 			(*int)(nil),
@@ -19,7 +19,7 @@ func TestIsZero(t *testing.T) {
 			uintptr(0),
 			float64(0),
 		} {
-			So(isZero(reflect.ValueOf(val)), ShouldBeTrue)
+			c.So(isZero(reflect.ValueOf(val)), ShouldBeTrue)
 		}
 		testStr := ""
 		testInt := 0
@@ -29,7 +29,7 @@ func TestIsZero(t *testing.T) {
 			&testStr,
 			[]string{"test"},
 		} {
-			So(isZero(reflect.ValueOf(val)), ShouldBeFalse)
+			c.So(isZero(reflect.ValueOf(val)), ShouldBeFalse)
 		}
 	})
 }

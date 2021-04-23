@@ -8,15 +8,15 @@ import (
 )
 
 func TestUserPool(t *testing.T) {
-	Convey("Test User Pool", t, func() {
+	Convey("Test User Pool", t, func(c C) {
 		pool := new(UserPool)
-		So(pool.GetUsersList(), ShouldBeEmpty)
-		Convey("Add users", func() {
+		c.So(pool.GetUsersList(), ShouldBeEmpty)
+		c.Convey("Add users", func(c C) {
 			pool.AddUser(plugin.UserContext{
 				ID:   1,
 				Name: "test",
 			})
-			So(pool.GetUsersList(), ShouldHaveLength, 1)
+			c.So(pool.GetUsersList(), ShouldHaveLength, 1)
 		})
 	})
 

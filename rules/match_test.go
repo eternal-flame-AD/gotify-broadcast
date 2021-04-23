@@ -61,7 +61,7 @@ func shouldMatchRule(actual interface{}, rules ...interface{}) string {
 }
 
 func TestMatchMatch(t *testing.T) {
-	Convey("Test Match Matching", t, func() {
+	Convey("Test Match Matching", t, func(c C) {
 		testMessage := model.Message{
 			Sender: plugin.UserContext{
 				ID:    1,
@@ -84,95 +84,95 @@ func TestMatchMatch(t *testing.T) {
 			IsSend:      false,
 			ChannelName: "test_channel",
 		}
-		Convey("empty rule should not panic", func() {
-			So(func() {
+		c.Convey("empty rule should not panic", func(c C) {
+			c.So(func() {
 				rule := Match{}
 				rule.Match(testMessage)
 			}, ShouldNotPanic)
 		})
-		Convey("any matching", func() {
-			So(testMessage, shouldMatchRule, Match{
+		c.Convey("any matching", func(c C) {
+			c.So(testMessage, shouldMatchRule, Match{
 				Mode: ModeAny,
 			})
 		})
-		Convey("channel matching", func() {
-			So(testMessage, shouldMatchRule, Match{
+		c.Convey("channel matching", func(c C) {
+			c.So(testMessage, shouldMatchRule, Match{
 				Mode:        ModeChannelName,
 				ChannelName: "test_channel",
 			})
-			So(testMessage, shouldNotMatchRule, Match{
+			c.So(testMessage, shouldNotMatchRule, Match{
 				Mode:        ModeChannelName,
 				ChannelName: "test.channel",
 			})
-			So(testMessage, shouldMatchRule, Match{
+			c.So(testMessage, shouldMatchRule, Match{
 				Mode:        ModeChannelName,
 				Regex:       true,
 				ChannelName: "test.channel",
 			})
 		})
-		Convey("message matching", func() {
-			Convey("match title", func() {
-				So(testMessage, shouldMatchRule, Match{
+		c.Convey("message matching", func(c C) {
+			c.Convey("match title", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:         ModeMessageTitle,
 					MessageTitle: "title",
 				})
-				So(testMessage, shouldNotMatchRule, Match{
+				c.So(testMessage, shouldNotMatchRule, Match{
 					Mode:         ModeMessageTitle,
 					MessageTitle: "t...e",
 				})
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:         ModeMessageTitle,
 					Regex:        true,
 					MessageTitle: "t...e",
 				})
 			})
-			Convey("match body", func() {
-				So(testMessage, shouldMatchRule, Match{
+			c.Convey("match body", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:        ModeMessageText,
 					MessageText: "message",
 				})
-				So(testMessage, shouldNotMatchRule, Match{
+				c.So(testMessage, shouldNotMatchRule, Match{
 					Mode:        ModeMessageText,
 					MessageText: "m.....e",
 				})
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:        ModeMessageText,
 					Regex:       true,
 					MessageText: "m.....e",
 				})
 			})
-			Convey("match extra", func() {
-				So(testMessage, shouldMatchRule, Match{
+			c.Convey("match extra", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:         ModeMessageExtra,
 					MessageExtra: "test::string",
 				})
-				So(testMessage, shouldNotMatchRule, Match{
+				c.So(testMessage, shouldNotMatchRule, Match{
 					Mode:         ModeMessageExtra,
 					MessageExtra: "test::*",
 				})
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:         ModeMessageExtra,
 					Regex:        true,
 					MessageExtra: "test::*",
 				})
 			})
-			Convey("match priority", func() {
+			c.Convey("match priority", func(c C) {
 				targetPriority := 5
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:            ModePriority,
 					MessagePriority: &targetPriority,
 				})
 				targetPriority = 4
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:            ModePriorityGt,
 					MessagePriority: &targetPriority,
 				})
 				targetPriority = 6
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:            ModePriorityLt,
 					MessagePriority: &targetPriority,
 				})
-				So(func() {
+				c.So(func() {
 					rule := Match{
 						Mode: ModePriority,
 					}
@@ -180,36 +180,36 @@ func TestMatchMatch(t *testing.T) {
 				}, ShouldNotPanic)
 			})
 		})
-		Convey("sender rule matching", func() {
-			Convey("match user id", func() {
-				So(testMessage, shouldMatchRule, Match{
+		c.Convey("sender rule matching", func(c C) {
+			c.Convey("match user id", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:   ModeUserID,
 					UserID: 1,
 				})
 			})
-			Convey("match user name", func() {
-				So(testMessage, shouldMatchRule, Match{
+			c.Convey("match user name", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:     ModeUserName,
 					UserName: "sender",
 				})
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:     ModeUserName,
 					Regex:    true,
 					UserName: "s....r",
 				})
 			})
-			Convey("match is admin", func() {
+			c.Convey("match is admin", func(c C) {
 				isAdmin := true
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:    ModeIsAdmin,
 					IsAdmin: &isAdmin,
 				})
 				isAdmin = false
-				So(testMessage, shouldNotMatchRule, Match{
+				c.So(testMessage, shouldNotMatchRule, Match{
 					Mode:    ModeIsAdmin,
 					IsAdmin: &isAdmin,
 				})
-				So(func() {
+				c.So(func() {
 					rule := Match{
 						Mode: ModeIsAdmin,
 					}
@@ -218,36 +218,36 @@ func TestMatchMatch(t *testing.T) {
 			})
 		})
 		testMessage.IsSend = true
-		Convey("receiver rule matching", func() {
-			Convey("match user id", func() {
-				So(testMessage, shouldMatchRule, Match{
+		c.Convey("receiver rule matching", func(c C) {
+			c.Convey("match user id", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:   ModeUserID,
 					UserID: 2,
 				})
 			})
-			Convey("match user name", func() {
-				So(testMessage, shouldMatchRule, Match{
+			c.Convey("match user name", func(c C) {
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:     ModeUserName,
 					UserName: "receiver",
 				})
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:     ModeUserName,
 					Regex:    true,
 					UserName: "re.....r",
 				})
 			})
-			Convey("match is admin", func() {
+			c.Convey("match is admin", func(c C) {
 				isAdmin := false
-				So(testMessage, shouldMatchRule, Match{
+				c.So(testMessage, shouldMatchRule, Match{
 					Mode:    ModeIsAdmin,
 					IsAdmin: &isAdmin,
 				})
 				isAdmin = true
-				So(testMessage, shouldNotMatchRule, Match{
+				c.So(testMessage, shouldNotMatchRule, Match{
 					Mode:    ModeIsAdmin,
 					IsAdmin: &isAdmin,
 				})
-				So(func() {
+				c.So(func() {
 					rule := Match{
 						Mode: ModeIsAdmin,
 					}
@@ -259,245 +259,245 @@ func TestMatchMatch(t *testing.T) {
 }
 
 func TestMatchCheck(t *testing.T) {
-	Convey("Test Check Match Syntax", t, func() {
-		Convey("mode not valid", func() {
+	Convey("Test Check Match Syntax", t, func(c C) {
+		c.Convey("mode not valid", func(c C) {
 			rule := Match{
 				Mode: "???",
 			}
-			So(rule, shouldBeInvalidRule, "mode")
+			c.So(rule, shouldBeInvalidRule, "mode")
 		})
-		Convey("channel name mode", func() {
-			Convey("missing field", func() {
+		c.Convey("channel name mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeChannelName,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:        ModeChannelName,
 					ChannelName: "some_channel_name",
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:        ModeUserID,
 					UserID:      1,
 					ChannelName: "some_channel_name",
 				}
-				So(rule, shouldBeInvalidRule, ErrExtraParam{})
+				c.So(rule, shouldBeInvalidRule, ErrExtraParam{})
 			})
 		})
-		Convey("user name mode", func() {
-			Convey("missing field", func() {
+		c.Convey("user name mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeUserName,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:     ModeUserName,
 					UserName: "some_user_name",
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:     ModeUserID,
 					UserID:   1,
 					UserName: "some_user_name",
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("user id mode", func() {
-			Convey("missing field", func() {
+		c.Convey("user id mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeUserID,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:   ModeUserID,
 					UserID: 1,
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:     ModeUserName,
 					UserID:   1,
 					UserName: "some_user_name",
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("is admin mode", func() {
+		c.Convey("is admin mode", func(c C) {
 			isAdmin := true
-			Convey("missing field", func() {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeIsAdmin,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:    ModeIsAdmin,
 					IsAdmin: &isAdmin,
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:    ModeUserID,
 					UserID:  1,
 					IsAdmin: &isAdmin,
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("message title mode", func() {
-			Convey("missing field", func() {
+		c.Convey("message title mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeMessageTitle,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:         ModeMessageTitle,
 					MessageTitle: "title",
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:         ModeMessageTitle,
 					UserID:       1,
 					MessageTitle: "title",
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("message text mode", func() {
-			Convey("missing field", func() {
+		c.Convey("message text mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeMessageText,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:        ModeMessageText,
 					MessageText: "text",
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:        ModeUserID,
 					UserID:      1,
 					MessageText: "text",
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("message extra mode", func() {
-			Convey("missing field", func() {
+		c.Convey("message extra mode", func(c C) {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModeMessageExtra,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:         ModeMessageExtra,
 					MessageExtra: "text",
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:         ModeUserID,
 					UserID:       1,
 					MessageExtra: "text",
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("priority mode", func() {
+		c.Convey("priority mode", func(c C) {
 			priority := 2
-			Convey("missing field", func() {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModePriority,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:            ModePriority,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:            ModePriority,
 					UserID:          1,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("priority_gt mode", func() {
+		c.Convey("priority_gt mode", func(c C) {
 			priority := 2
-			Convey("missing field", func() {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModePriorityGt,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:            ModePriorityGt,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:            ModePriorityGt,
 					UserID:          1,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
-		Convey("priority_lt mode", func() {
+		c.Convey("priority_lt mode", func(c C) {
 			priority := 2
-			Convey("missing field", func() {
+			c.Convey("missing field", func(c C) {
 				rule := Match{
 					Mode: ModePriorityLt,
 				}
-				So(rule, shouldBeInvalidRule, ErrMissingParam{})
+				c.So(rule, shouldBeInvalidRule, ErrMissingParam{})
 			})
-			Convey("valid config", func() {
+			c.Convey("valid config", func(c C) {
 				rule := Match{
 					Mode:            ModePriorityLt,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeValidRule)
+				c.So(rule, shouldBeValidRule)
 			})
-			Convey("extra field", func() {
+			c.Convey("extra field", func(c C) {
 				rule := Match{
 					Mode:            ModePriorityLt,
 					UserID:          1,
 					MessagePriority: &priority,
 				}
-				So(rule, shouldBeInvalidRule, "extra")
+				c.So(rule, shouldBeInvalidRule, "extra")
 			})
 		})
 	})

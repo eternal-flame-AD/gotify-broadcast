@@ -8,21 +8,21 @@ import (
 )
 
 func TestAPICompatibility(t *testing.T) {
-	Convey("test API compatibility", t, func() {
-		Convey("should implement plugin", func() {
-			So(new(Plugin), ShouldImplement, (*plugin.Plugin)(nil))
+	Convey("test API compatibility", t, func(c C) {
+		c.Convey("should implement plugin", func(c C) {
+			c.So(new(Plugin), ShouldImplement, (*plugin.Plugin)(nil))
 		})
-		Convey("should have configurer", func() {
-			So(new(Plugin), ShouldImplement, (*plugin.Configurer)(nil))
+		c.Convey("should have configurer", func(c C) {
+			c.So(new(Plugin), ShouldImplement, (*plugin.Configurer)(nil))
 		})
-		Convey("should have webhooker", func() {
-			So(new(Plugin), ShouldImplement, (*plugin.Webhooker)(nil))
+		c.Convey("should have webhooker", func(c C) {
+			c.So(new(Plugin), ShouldImplement, (*plugin.Webhooker)(nil))
 		})
-		Convey("should have messenger", func() {
-			So(new(Plugin), ShouldImplement, (*plugin.Messenger)(nil))
+		c.Convey("should have messenger", func(c C) {
+			c.So(new(Plugin), ShouldImplement, (*plugin.Messenger)(nil))
 		})
-		Convey("should have displayer", func() {
-			So(new(Plugin), ShouldImplement, (*plugin.Displayer)(nil))
+		c.Convey("should have displayer", func(c C) {
+			c.So(new(Plugin), ShouldImplement, (*plugin.Displayer)(nil))
 		})
 	})
 }

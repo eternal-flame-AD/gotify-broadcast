@@ -33,10 +33,10 @@ func shouldAllBePublicChannel(actual interface{}, expected ...interface{}) strin
 }
 
 func TestPublicChannels(t *testing.T) {
-	Convey("Test Public Channel Registry", t, func() {
+	Convey("Test Public Channel Registry", t, func(c C) {
 		registry := new(PublicChannelListManager)
-		So(registry.GetAllChannels(), ShouldBeEmpty)
-		Convey("adds single user", func() {
+		c.So(registry.GetAllChannels(), ShouldBeEmpty)
+		c.Convey("adds single user", func(c C) {
 			registry.UpdateChannelsForUser(plugin.UserContext{
 				ID:    1,
 				Name:  "test",
@@ -45,10 +45,10 @@ func TestPublicChannels(t *testing.T) {
 				{"test_channel", true},
 				{"test_private_channel", false},
 			})
-			So(registry.GetAllChannels(), ShouldHaveLength, 1)
-			So(registry.GetAllChannels(), shouldAllBePublicChannel)
+			c.So(registry.GetAllChannels(), ShouldHaveLength, 1)
+			c.So(registry.GetAllChannels(), shouldAllBePublicChannel)
 		})
-		Convey("updates user", func() {
+		c.Convey("updates user", func(c C) {
 			registry.UpdateChannelsForUser(plugin.UserContext{
 				ID:    1,
 				Name:  "test",
@@ -57,10 +57,10 @@ func TestPublicChannels(t *testing.T) {
 				{"test_private_channel", true},
 				{"test_public_channel", true},
 			})
-			So(registry.GetAllChannels(), ShouldHaveLength, 2)
-			So(registry.GetAllChannels(), shouldAllBePublicChannel)
+			c.So(registry.GetAllChannels(), ShouldHaveLength, 2)
+			c.So(registry.GetAllChannels(), shouldAllBePublicChannel)
 		})
-		Convey("sync safety", func() {
+		c.Convey("sync safety", func(c C) {
 
 			registry.UpdateChannelsForUser(plugin.UserContext{
 				ID:    1,
@@ -97,14 +97,14 @@ func TestPublicChannels(t *testing.T) {
 			for !done {
 
 				channels := registry.GetAllChannels()
-				So(channels, shouldAllBePublicChannel)
+				c.So(channels, shouldAllBePublicChannel)
 				uID1ChanCount := 0
 				for _, c := range channels {
 					if c.UserContext.ID == 1 {
 						uID1ChanCount++
 					}
 				}
-				So(uID1ChanCount, ShouldEqual, 1)
+				c.So(uID1ChanCount, ShouldEqual, 1)
 
 				select {
 				case <-generaterChan:

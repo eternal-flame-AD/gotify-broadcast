@@ -46,7 +46,7 @@ func shouldBeInvalidChain(actual interface{}, errExpected ...interface{}) string
 }
 
 func TestChainCheck(t *testing.T) {
-	Convey("Test Rule Chain Checking", t, func() {
+	Convey("Test Rule Chain Checking", t, func(c C) {
 		testChain := RuleChain{
 			Rule{
 				Match: MatchSet{
@@ -62,7 +62,7 @@ func TestChainCheck(t *testing.T) {
 			testChain = append(RuleChain{item}, testChain...)
 		}
 
-		So(testChain, shouldBeValidChain)
+		c.So(testChain, shouldBeValidChain)
 
 		prependRule(Rule{
 			Match: MatchSet{
@@ -74,7 +74,7 @@ func TestChainCheck(t *testing.T) {
 			Action: Action("???"),
 		})
 
-		So(testChain, shouldBeInvalidChain, 0)
+		c.So(testChain, shouldBeInvalidChain, 0)
 
 		prependRule(Rule{
 			Match: MatchSet{
@@ -85,12 +85,12 @@ func TestChainCheck(t *testing.T) {
 			Action: Reject,
 		})
 
-		So(testChain, shouldBeInvalidChain, 0, 1)
+		c.So(testChain, shouldBeInvalidChain, 0, 1)
 	})
 }
 
 func TestChainMatch(t *testing.T) {
-	Convey("Test Rule Chain Matching", t, func() {
+	Convey("Test Rule Chain Matching", t, func(c C) {
 		testChain := RuleChain{}
 
 		prependRule := func(item Rule) {
@@ -120,11 +120,11 @@ func TestChainMatch(t *testing.T) {
 			ChannelName: "test_channel",
 		}
 
-		Convey("default action", func() {
-			So(testChain.Match(testMessage, Reject), shouldUseAction, Reject)
+		c.Convey("default action", func(c C) {
+			c.So(testChain.Match(testMessage, Reject), shouldUseAction, Reject)
 		})
 
-		Convey("sender is admin", func() {
+		c.Convey("sender is admin", func(c C) {
 			isAdmin := true
 			prependRule(Rule{
 				Match: MatchSet{
@@ -135,9 +135,9 @@ func TestChainMatch(t *testing.T) {
 				},
 				Action: Accept,
 			})
-			So(testChain.Match(testMessage, Reject), shouldUseAction, Accept)
+			c.So(testChain.Match(testMessage, Reject), shouldUseAction, Accept)
 		})
-		Convey("has extra", func() {
+		c.Convey("has extra", func(c C) {
 			prependRule(Rule{
 				Match: MatchSet{
 					Match{
@@ -148,9 +148,9 @@ func TestChainMatch(t *testing.T) {
 				},
 				Action: Reject,
 			})
-			So(testChain.Match(testMessage, Accept), shouldUseAction, Reject)
+			c.So(testChain.Match(testMessage, Accept), shouldUseAction, Reject)
 		})
-		Convey("AND matching", func() {
+		c.Convey("AND matching", func(c C) {
 			testChain = RuleChain{}
 
 			prependRule(Rule{
@@ -183,7 +183,7 @@ func TestChainMatch(t *testing.T) {
 				Action: Reject,
 			})
 
-			So(testChain.Match(testMessage, Reject), shouldUseAction, Accept)
+			c.So(testChain.Match(testMessage, Reject), shouldUseAction, Accept)
 		})
 	})
 }

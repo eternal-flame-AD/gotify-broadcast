@@ -19,6 +19,7 @@ update-go-mod: create-build-dir
 	gomod-cap -from ${BUILDDIR}/gotify-server.mod -to go.mod
 	rm ${BUILDDIR}/gotify-server.mod || true
 	cp internal/ensure/ensure.go.$(shell echo ${GOTIFY_VERSION} | egrep -o "^v[0-9]+") internal/ensure/ensure.go
+	go mod edit -require=github.com/gotify/server$(shell echo "/${GOTIFY_VERSION}" | egrep -o "^/v[2-9][0-9]*")@${GOTIFY_VERSION}
 	go mod tidy
 
 get-gotify-server-go-version: create-build-dir

@@ -3,6 +3,8 @@ on: [push]
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-go@v4
@@ -11,6 +13,8 @@ jobs:
             - name: "Download tools and dependencies"
               run: 
                 make download-tools && go get -d
+            - name: "Run tests"
+              run: go test ./...
             - name: "Build plugin"
               run: >
                 export GOTIFY_VERSIONS="v2.3.0 v2.2.5 v2.2.4 v2.2.3 v2.2.2 v2.2.1 v2.2.0 v2.1.7 v2.1.6 v2.1.5 v2.1.4";
@@ -25,4 +29,4 @@ jobs:
             - uses: ncipollo/release-action@v1
               if: startsWith(github.ref, 'refs/tags/v')
               with:
-                artifacts: "build"
+                artifacts: "build/*"

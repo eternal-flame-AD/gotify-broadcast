@@ -1,0 +1,24 @@
+name: Check upstream releases
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  check-upstream:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.16
+
+    - name: Run Go project
+      run: go run ./upstream-follower/
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

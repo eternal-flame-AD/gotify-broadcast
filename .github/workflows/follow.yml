@@ -1,6 +1,7 @@
 name: Check upstream releases
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 0 * * *'
 
@@ -9,16 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
 
-    - name: Set up Go 1.x
-      uses: actions/setup-go@v2
-      with:
-        go-version: ^1.16
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
 
-    - name: Run Go project
-      run: go run ./upstream-follower/
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Check upstream releases
+        run: >
+          cd upstream-follower &&
+          go build -o follow &&
+          cd .. &&
+          ./upstream-follower/follow \
+            -email "bot@yumechi.jp" \
+            -name "Gotify-broadcast release bot" \
+            -coauthor-email "yume@yumechi.jp" \
+            -coauthor "eternal-flame-AD" \
+            -days 730 \
+            -commit \
+            -tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

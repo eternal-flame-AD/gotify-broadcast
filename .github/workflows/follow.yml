@@ -34,7 +34,7 @@ jobs:
             -name "Gotify-broadcast release bot" \
             -coauthor-email "yume@yumechi.jp" \
             -coauthor "eternal-flame-AD" \
-            -days 730 \
+            -days 365 \
             -commit \
             -tag
 

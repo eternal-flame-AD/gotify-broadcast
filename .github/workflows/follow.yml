@@ -37,5 +37,6 @@ jobs:
             -days 730 \
             -commit \
             -tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: GitHub Push
+        uses: ad-m/github-push-action@v1.0.0

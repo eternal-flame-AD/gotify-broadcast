@@ -14,7 +14,6 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/plumbing/object"
-	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/google/go-github/v63/github"
 )
 
@@ -337,24 +336,6 @@ func main() {
 
 			log.Printf("Successfully created the tag: %v", tag)
 
-			// push
-			token := os.Getenv("GITHUB_TOKEN")
-			if token == "" {
-				log.Fatalf("GITHUB_TOKEN is not set")
-			}
-
-			remote, err := gitRepo.Remote("origin")
-			if err != nil {
-				log.Fatalf("Failed to get remote: %v", err)
-			}
-
-			err = remote.Push(&git.PushOptions{
-				Auth: &http.TokenAuth{Token: token},
-			})
-
-			if err != nil {
-				log.Fatalf("Failed to push: %v", err)
-			}
 		}
 	}
 	log.Printf("Done, version list updated and committed")

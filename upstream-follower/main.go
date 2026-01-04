@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 	"time"
@@ -246,6 +247,12 @@ func main() {
 
 	if releaseVersions[len(releaseVersions)-1].Greater(alreadySupportedVersions[len(alreadySupportedVersions)-1]) {
 		log.Printf("New version detected: %s", releaseVersions[len(releaseVersions)-1])
+		releaseVersionsStr := make([]string, len(releaseVersions))
+		for i, v := range releaseVersions {
+			releaseVersionsStr[i] = v.String()
+		}
+		slices.Reverse(releaseVersionsStr)
+		os.WriteFile("ci/SUPPORTED_VERSIONS.txt", []byte(strings.Join(releaseVersionsStr, "\n")), 0644)
 	} else {
 		log.Printf("No new version detected, nothing to do")
 		return

@@ -1,31 +1,30 @@
 name: "Build Plugin"
 on: [push]
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-        steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-go@v4
-              with:
-                go-version: 'stable'
-            - name: "Download tools and dependencies"
-              run: 
-                make download-tools && go get -d
-            - name: "Run tests"
-              run: go test ./...
-            - name: "Build plugin"
-              run: >
-                cat ci/SUPPORTED_VERSIONS.txt | while read TARGET; do
-                    make GOTIFY_VERSION="$TARGET" FILE_SUFFIX="-for-gotify-$TARGET" build || exit 1
-                done
-            - name: "Upload plugin"
-              uses: actions/upload-artifact@v4
-              with:
-                name: gotify-plugin
-                path: build
-            - uses: ncipollo/release-action@v1
-              if: startsWith(github.ref, 'refs/tags/v')
-              with:
-                artifacts: "build/*"
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v4
+        with:
+          go-version: "stable"
+      - name: "Download tools and dependencies"
+        run: make download-tools && go get -d
+      - name: "Run tests"
+        run: go test ./...
+      - name: "Build plugin"
+        run: >
+          cat ci/SUPPORTED_VERSIONS.txt | while read TARGET; do
+              make GOTIFY_VERSION="$TARGET" FILE_SUFFIX="-for-gotify-$TARGET" build || exit 1
+          done
+      - name: "Upload plugin"
+        uses: actions/upload-artifact@v4
+        with:
+          name: gotify-plugin
+          path: build
+      - uses: ncipollo/release-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          artifacts: "build/*"

@@ -147,7 +147,7 @@ func (c Match) paramFields() []string {
 		"MessagePriority",
 	} {
 		fieldVal := val.FieldByName(field)
-		if !isZero(fieldVal) {
+		if !fieldVal.IsZero() {
 			res = append(res, c.getYAMLTagName(field))
 		}
 	}

@@ -34,7 +34,7 @@ type ErrMatchSetInvalid struct {
 func (c ErrMatchSetInvalid) Error() string {
 	b := bytes.NewBuffer([]byte{})
 	for _, err := range c.Errors {
-		b.WriteString(fmt.Sprintf("in match rule index %d: %s", err.Index, err.Error.Error()))
+		fmt.Fprintf(b, "in match rule index %d: %s", err.Index, err.Error.Error())
 	}
 	return b.String()
 }
@@ -60,7 +60,7 @@ type RuleChainError struct {
 func (c RuleChainError) Error() string {
 	b := bytes.NewBuffer([]byte{})
 	for _, err := range c.Errors {
-		b.WriteString(fmt.Sprintf("chain index %d: %s", err.Index, err.Error.Error()))
+		fmt.Fprintf(b, "chain index %d: %s", err.Index, err.Error.Error())
 	}
 	return b.String()
 }

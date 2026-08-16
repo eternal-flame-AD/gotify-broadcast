@@ -43,9 +43,7 @@ func (c *PublicChannelListManager) GetAllChannels() []ChannelWithUserContext {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 
-	for _, ch := range c.channels {
-		res = append(res, ch)
-	}
+	res = append(res, c.channels...)
 	return res
 }
 

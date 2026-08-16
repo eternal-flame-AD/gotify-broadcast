@@ -33,7 +33,7 @@ func (c *Plugin) recvMessage(msg model.Message) {
 		if err := msgTemplate.Execute(wrappedMsg, msg); err == nil {
 			msg.Msg.Message = wrappedMsg.String()
 		}
-		c.msgHandler.SendMessage(msg.Msg)
+		_ = c.msgHandler.SendMessage(msg.Msg)
 	}
 }
 

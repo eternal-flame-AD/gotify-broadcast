@@ -28,8 +28,6 @@ func (c *UserPool) GetUsersList() []plugin.UserContext {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
 
-	for _, u := range c.users {
-		res = append(res, u)
-	}
+	res = append(res, c.users...)
 	return res
 }

@@ -30,7 +30,7 @@ func (c *Plugin) RegisterWebhook(basePath string, mux *gin.RouterGroup) {
 	mux.POST("/message", func(ctx *gin.Context) {
 		channel := ctx.Query("channel")
 		if !c.hasChannel(channel) {
-			ctx.AbortWithError(400, errors.New("channel not found"))
+			_ = ctx.AbortWithError(400, errors.New("channel not found"))
 			return
 		}
 		msg := new(message)
